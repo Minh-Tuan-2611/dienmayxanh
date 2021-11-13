@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="./cart.css">
+    <script src="./cart.js"></script>
+    <script src="./index.js"></script>
+</head>
+
+<body>
+    <nav id="nav-bar">
+        <ul class="menu-level-1">
+            <li class="item-level-1">
+                <a href="./product-list.html" class="item-level-1-title">Trang chủ</a>
+            </li>
+            <li class="item-level-1">
+                <a href="" class="item-level-1-title">Quần áo</a>
+                <ul class="menu-level-2">
+                    <li class="item-level-2">
+                        <a href="" class="item-level-2-title">Quần áo nam</a>
+                    </li>
+                    <li class="item-level-2">
+                        <a href="" class="item-level-2-title">Quần áo nữ</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="item-level-1">
+                <a href="" class="item-level-1-title">Phụ kiện</a>
+            </li>
+            <li class="item-level-1">
+                <a href="" class="item-level-1-title">Đồ điện tử</a>
+                <ul class="menu-level-2">
+                    <li class="item-level-2">
+                        <a href="" class="item-level-2-title">Điện thoại</a>
+                    </li>
+                    <li class="item-level-2">
+                        <a href="" class="item-level-2-title">Đồ gia dụng</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="item-level-1">
+                <i class="fas fa-shopping-cart cart-item"></i>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="cart">
+
+    </div>
+
+    <script>
+        function render() {
+            var cartListItem = getCartListItem();
+            var html = moveCartItemListToHtml(cartListItem);
+            document.querySelector('.cart').innerHTML = html;
+        }
+
+        function moveCartItemListToHtml(listItem) {
+            var htmlTong = '';
+            for (var i = 0; i < listItem.length; i++) {
+                if (listItem.length == 0) {
+                    htmlTong = '';
+                } else {
+                    htmlTong += moveCartItemToHtml(listItem[i]);
+                }
+            }
+            if (listItem.length == 0) {
+                htmlTong = '';
+            } else {
+                htmlTong += `<button onclick="removeAllCart()" class="delete-all">Xóa toàn bộ sản phẩm</button>`
+            }
+            return htmlTong;
+        }
+
+        function moveCartItemToHtml(cartItem) {
+            var product = truyXuatTheoId(cartItem.id);
+            var html;
+            if (product.priceOld == undefined) {
+                html = '';
+            } else {
+                html = `
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            <img src="${product.img}"
+                                alt="">
+                        </div>
+                        <p class="cart-item-name">${product.name}</p>
+                        <div class="cart-item-price">
+                            <p class="cart-item-price-old">${product.priceOld} đ</p>
+                            <p class="cart-item-price-sale">${product.priceSale()} đ</p>
+                        </div>
+                        <input type="number" class="cart-item-number" value="${cartItem.number}">
+                        <p class="cart-item-sum-money">${product.priceSale()*cartItem.number} đ</p>
+                        <div class="cart-item-delete">
+                            <i onclick="removeCart('${product.id}')" class="fas fa-trash cart-item-delete-icon"></i>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+        render();
+    </script>
+</body>
+
+</html>
